@@ -5,9 +5,9 @@ import { UserEditPage } from './pages/UserEditPage/UserEditPage';
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<UsersPage />} />
+      <Route path="/" element={<Navigate to="/users" replace />} />
+      <Route path="/users" element={<UsersPage />} />
       <Route path="/users/:id" element={<UserEditPage />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }

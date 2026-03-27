@@ -1,46 +1,43 @@
-import './UserCard.scss';
 import type { User } from '../../types/user';
-import { CardMenu, type CardMenuItem } from '../CardMenu/CardMenu';
+import { CardMenu } from '../CardMenu/CardMenu';
+import './UserCard.scss';
 
-interface UserCardProps {
+type UserCardProps = {
   user: User;
-  archived?: boolean;
-  onToggleArchive: (id: number) => void;
-  onHide: (id: number) => void;
-}
+  isArchived?: boolean;
+  onArchive?: () => void;
+  onActivate?: () => void;
+  onHide?: () => void;
+};
 
-export function UserCard({
+export const UserCard = ({
   user,
-  archived = false,
-  onToggleArchive,
+  isArchived = false,
+  onArchive,
+  onActivate,
   onHide,
-}: UserCardProps) {
-  const menuItems: CardMenuItem[] = archived
-    ? [{ label: 'Активировать', onClick: () => onToggleArchive(user.id) }]
-    : [
-        { label: 'Редактировать', to: `/users/${user.id}` },
-        { label: 'Архивировать', onClick: () => onToggleArchive(user.id) },
-        { label: 'Скрыть', onClick: () => onHide(user.id) },
-      ];
-
+}: UserCardProps) => {
   return (
-    <article className={`user-card ${archived ? 'is-archived' : ''}`}>
-      <div className="user-card__media">
-        <img src={user.avatar} alt={user.username} className="user-card__image" />
-      </div>
+    <article className={`card ${isArchived ? 'archived' : ''}`}>
+      <div className="top">
+        <div className="userInfo">
+          <img src={user.avatar} alt={user.name} className="avatar" />
 
-      <div className="user-card__content">
-        <div className="user-card__header">
-          <div className="user-card__title-group">
-            <h3 className="user-card__username">{user.username}</h3>
-            <p className="user-card__company">{user.companyName}</p>
+          <div className="text">
+            <div className="username">{user.username}</div>
+            <div className="company">{user.companyName}</div>
+            <div className="city">{user.city}</div>
           </div>
-
-          <CardMenu items={menuItems} />
         </div>
 
-        <p className="user-card__city">{user.city}</p>
+        <CardMenu
+          userId={user.id}
+          isArchived={isArchived}
+          onArchive={onArchive}
+          onActivate={onActivate}
+          onHide={onHide}
+        />
       </div>
     </article>
   );
-}
+};

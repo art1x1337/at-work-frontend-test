@@ -2,73 +2,94 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router';
 import './CardMenu.scss';
 
-export interface CardMenuItem {
-  label: string;
-  to?: string;
-  onClick?: () => void;
-  danger?: boolean;
-}
+type CardMenuProps = {
+  userId: number;
+  isArchived?: boolean;
+  onArchive?: () => void;
+  onActivate?: () => void;
+  onHide?: () => void;
+};
 
-interface CardMenuProps {
-  items: CardMenuItem[];
-}
-
-export function CardMenu({ items }: CardMenuProps) {
+export const CardMenu = ({
+  userId,
+  isArchived = false,
+  onArchive,
+  onActivate,
+  onHide,
+}: CardMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (!rootRef.current?.contains(event.target as Node)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (!rootRef.current) {
+        return;
+      }
+
+      if (!rootRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
-    }
+    };
 
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
   return (
-    <div className="card-menu" ref={rootRef}>
+    <div className="menu" ref={rootRef}>
       <button
-        className="card-menu__toggle"
+        className="trigger"
         type="button"
-        aria-label="Открыть меню действий"
-        onClick={() => setIsOpen((currentValue) => !currentValue)}
+        aria-label="Открыть меню"
+        onClick={() => setIsOpen((prev) => !prev)}
       >
-        <span />
-        <span />
-        <span />
+        ⋮
       </button>
 
       {isOpen && (
-        <div className="card-menu__dropdown">
-          {items.map((item) =>
-            item.to ? (
-              <Link
-                key={item.label}
-                to={item.to}
-                className={`card-menu__item ${item.danger ? 'is-danger' : ''}`}
-                onClick={() => setIsOpen(false)}
-              >
-                {item.label}
+        <div className="dropdown">
+          {isArchived ? (
+            <button
+              type="button"
+              onClick={() => {
+                onActivate?.();
+                setIsOpen(false);
+              }}
+            >
+              Активировать
+            </button>
+          ) : (
+            <>
+              <Link to={`/users/${userId}`} onClick={() => setIsOpen(false)}>
+                Редактировать
               </Link>
-            ) : (
+
               <button
-                key={item.label}
-                className={`card-menu__item ${item.danger ? 'is-danger' : ''}`}
                 type="button"
                 onClick={() => {
-                  item.onClick?.();
+                  onArchive?.();
                   setIsOpen(false);
                 }}
               >
-                {item.label}
+                Архивировать
               </button>
-            ),
+
+              <button
+                type="button"
+                onClick={() => {
+                  onHide?.();
+                  setIsOpen(false);
+                }}
+              >
+                Скрыть
+              </button>
+            </>
           )}
         </div>
       )}
     </div>
   );
-}
+};

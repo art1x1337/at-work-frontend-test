@@ -1,86 +1,78 @@
 @use '../../styles/variables' as *;
 
-.users-page {
+.page {
   min-height: 100vh;
   background: $color-bg;
+}
 
-  &__content {
-    max-width: $container-width;
-    margin: 0 auto;
-    padding: 32px 24px 56px;
+.content {
+  max-width: $container-width;
+  margin: 0 auto;
+  padding: 20px 24px 40px;
+}
+
+.section + .section {
+  margin-top: 36px;
+}
+
+.sectionTitle {
+  margin: 0 0 18px;
+  color: $color-text;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.message {
+  color: $color-text-secondary;
+  font-size: 16px;
+}
+
+.retryButton {
+  border: 0;
+  background: $color-text;
+  color: $color-surface;
+  height: 42px;
+  padding: 0 28px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 18px;
+}
+
+.emptyText {
+  color: $color-text-muted;
+  font-size: 16px;
+}
+
+@media (max-width: $breakpoint-mobile) {
+  .content {
+    padding: 14px 16px 28px;
   }
 
-  &__section + &__section {
-    margin-top: 36px;
+  .section + .section {
+    margin-top: 28px;
   }
 
-  &__section-head {
-    border-bottom: 1px solid rgba($color-border, 0.9);
-    padding-bottom: 14px;
-    margin-bottom: 20px;
+  .sectionTitle {
+    margin-bottom: 14px;
+    font-size: 18px;
   }
 
-  &__title {
-    margin: 0;
-    color: $color-text;
-    font-size: 24px;
-    font-weight: 600;
-    line-height: 1.2;
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
   }
 
-  &__grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 18px 22px;
-  }
-
-  &__message,
-  &__empty {
-    margin: 0;
-    color: $color-text-secondary;
-    font-size: 16px;
-    line-height: 1.35;
-  }
-
-  &__retry {
-    margin-top: 12px;
-    border: 0;
-    background: $color-text;
-    color: $color-surface;
-    height: 40px;
-    padding: 0 18px;
-    border-radius: 999px;
-    cursor: pointer;
+  .emptyText,
+  .message {
     font-size: 14px;
-    font-weight: 500;
-  }
-
-  @media (max-width: $breakpoint-mobile) {
-    &__content {
-      padding: 18px 16px 32px;
-    }
-
-    &__section + &__section {
-      margin-top: 24px;
-    }
-
-    &__section-head {
-      padding-bottom: 10px;
-      margin-bottom: 14px;
-    }
-
-    &__title {
-      font-size: 18px;
-    }
-
-    &__grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px 14px;
-    }
-
-    &__message,
-    &__empty {
-      font-size: 14px;
-    }
   }
 }

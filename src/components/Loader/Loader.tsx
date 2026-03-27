@@ -1,14 +1,10 @@
 import './Loader.scss';
 
-interface LoaderProps {
-  text?: string;
-}
-
-export function Loader({ text = 'Загрузка...' }: LoaderProps) {
+export const Loader = ({ label = 'Загрузка...' }: { label?: string }) => {
   return (
-    <div className="loader" role="status" aria-live="polite">
-      <span className="loader__spinner" />
-      <span className="loader__text">{text}</span>
+    <div className="loader-box" role="status" aria-live="polite">
+      <span className="loader-spinner" />
+      <span>{label}</span>
     </div>
   );
-}
+};

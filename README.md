@@ -1,37 +1,57 @@
-# AT-WORK test task
+# AT-WORK Frontend Test Task
 
-Двухстраничное приложение на **React + TypeScript** по ТЗ.
-
-## Что реализовано
-
-- главная страница со списком первых 6 пользователей из `jsonplaceholder`
-- действия с карточкой: **редактировать / архивировать / скрыть**
-- отдельная секция **Архив** с возвратом карточки в активные
-- страница редактирования пользователя
-- валидация через **React Hook Form + Zod**
-- попап успешного сохранения с закрытием по крестику, подложке и таймеру 4 сек
-- загрузочные состояния
-- локальное хранение UI-состояния через **Zustand**
-- запросы через **TanStack Query**
-- роутинг через **React Router v7**
-- стили на **SCSS**
+Тестовое задание на React + TypeScript.
 
 ## Стек
-
 - React
 - TypeScript
 - Zustand
 - React Hook Form
 - Zod
 - TanStack Query
-- React Router v7
 - SCSS
+- React Router v7
 - Vite
 
-## Запуск локально
+## Реализовано
+
+### Главная страница
+- загрузка пользователей с `https://jsonplaceholder.typicode.com/users`
+- отображение первых 6 пользователей
+- карточка пользователя содержит:
+  - username
+  - city
+  - company name
+  - avatar
+- действия:
+  - редактировать
+  - архивировать
+  - скрыть
+- архивированные карточки можно вернуть в активные
+- во время загрузки отображается loader
+
+### Страница редактирования
+- отображаются поля:
+  - name
+  - username
+  - email
+  - city
+  - phone
+  - company name
+  - avatar
+- редактирование через форму
+- валидация через React Hook Form + Zod
+- popup после успешного сохранения
+- popup закрывается:
+  - по крестику
+  - по клику на подложку
+  - автоматически через 4 секунды
+
+## Запуск проекта
 
 ```bash
 npm install
+<<<<<<< HEAD
 npm run dev
 ```
 
@@ -69,3 +89,6 @@ npm run build
 ```bash
 npm install
 npm run dev
+=======
+npm run dev
+>>>>>>> 5c6ec44 (refactor: final cleanup and ui polish)

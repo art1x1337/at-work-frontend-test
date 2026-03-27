@@ -1,51 +1,46 @@
 import { create } from 'zustand';
-import type { EditableUserFields, User } from '../types/user';
-
-type UserPatch = Partial<EditableUserFields>;
+import type { EditableUserFields } from '../types/user';
 
 type UsersStore = {
   archivedIds: number[];
   hiddenIds: number[];
-  updatedUsers: Record<number, UserPatch>;
+  editedUsers: Record<number, EditableUserFields>;
+
   archiveUser: (id: number) => void;
-  activateUser: (id: number) => void;
+  restoreUser: (id: number) => void;
   hideUser: (id: number) => void;
-  updateUser: (id: number, payload: UserPatch) => void;
-  getMergedUser: (user: User) => User;
+  saveUserChanges: (id: number, data: EditableUserFields) => void;
 };
 
-const withoutId = (ids: number[], targetId: number) => ids.filter((id) => id !== targetId);
-
-export const useUsersStore = create<UsersStore>((set, get) => ({
+export const useUsersStore = create<UsersStore>((set) => ({
   archivedIds: [],
   hiddenIds: [],
-  updatedUsers: {},
+  editedUsers: {},
+
   archiveUser: (id) =>
     set((state) => ({
-      archivedIds: state.archivedIds.includes(id) ? state.archivedIds : [...state.archivedIds, id],
-      hiddenIds: withoutId(state.hiddenIds, id),
+      archivedIds: state.archivedIds.includes(id)
+        ? state.archivedIds
+        : [...state.archivedIds, id],
     })),
-  activateUser: (id) =>
+
+  restoreUser: (id) =>
     set((state) => ({
-      archivedIds: withoutId(state.archivedIds, id),
+      archivedIds: state.archivedIds.filter((item) => item !== id),
     })),
+
   hideUser: (id) =>
     set((state) => ({
-      hiddenIds: state.hiddenIds.includes(id) ? state.hiddenIds : [...state.hiddenIds, id],
-      archivedIds: withoutId(state.archivedIds, id),
+      hiddenIds: state.hiddenIds.includes(id)
+        ? state.hiddenIds
+        : [...state.hiddenIds, id],
     })),
-  updateUser: (id, payload) =>
+
+  saveUserChanges: (id, data) =>
     set((state) => ({
-      updatedUsers: {
-        ...state.updatedUsers,
-        [id]: {
-          ...state.updatedUsers[id],
-          ...payload,
-        },
+      editedUsers: {
+        ...state.editedUsers,
+        [id]: data,
       },
     })),
-  getMergedUser: (user) => {
-    const patch = get().updatedUsers[user.id];
-    return patch ? { ...user, ...patch } : user;
-  },
 }));

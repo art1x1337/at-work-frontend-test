@@ -1,11 +1,11 @@
-import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
+
 import { fetchUsers } from '../../api/users';
 import { AppHeader } from '../../components/AppHeader/AppHeader';
 import { Loader } from '../../components/Loader/Loader';
 import { UserCard } from '../../components/UserCard/UserCard';
-import { useUsersUiStore } from '../../store/usersUiStore';
-import { mergeUser } from '../../utils/userHelpers';
+import { useUsersStore } from '../../store/usersStore';
+import type { User } from '../../types/user';
 import './UsersPage.scss';
 
 export function UsersPage() {
@@ -14,83 +14,89 @@ export function UsersPage() {
     queryFn: fetchUsers,
   });
 
-  const archivedIds = useUsersUiStore((state) => state.archivedIds);
-  const hiddenIds = useUsersUiStore((state) => state.hiddenIds);
-  const editedUsers = useUsersUiStore((state) => state.editedUsers);
-  const toggleArchive = useUsersUiStore((state) => state.toggleArchive);
-  const hideUser = useUsersUiStore((state) => state.hideUser);
+  const archivedIds = useUsersStore((state) => state.archivedIds);
+  const hiddenIds = useUsersStore((state) => state.hiddenIds);
+  const editedUsers = useUsersStore((state) => state.editedUsers);
+  const archiveUser = useUsersStore((state) => state.archiveUser);
+  const restoreUser = useUsersStore((state) => state.restoreUser);
+  const hideUser = useUsersStore((state) => state.hideUser);
 
-  const visibleUsers = useMemo(
-    () => (data ?? []).map((user) => mergeUser(user, editedUsers[user.id])),
-    [data, editedUsers],
-  );
+  const users: User[] = (data ?? []).map((user) => {
+  const editedUser = editedUsers[user.id];
 
-  const activeUsers = visibleUsers.filter(
+  if (!editedUser) {
+    return user;
+  }
+
+  return {
+    ...user,
+    ...editedUser,
+  };
+});
+
+  const activeUsers = users.filter(
     (user) => !hiddenIds.includes(user.id) && !archivedIds.includes(user.id),
   );
 
-  const archivedUsers = visibleUsers.filter(
+  const archivedUsers = users.filter(
     (user) => !hiddenIds.includes(user.id) && archivedIds.includes(user.id),
   );
 
   return (
-    <div className="users-page">
+    <div className="page">
       <AppHeader />
 
-      <main className="users-page__content">
-        <section className="users-page__section">
-          <div className="users-page__section-head">
-            <h1 className="users-page__title">Активные</h1>
+      <main className="content">
+        {isLoading ? (
+          <Loader />
+        ) : isError ? (
+          <div className="message">
+            <p>Не получилось загрузить пользователей.</p>
+            <button type="button" className="retryButton" onClick={() => refetch()}>
+              Попробовать ещё раз
+            </button>
           </div>
+        ) : (
+          <>
+            <section className="section">
+              <h1 className="sectionTitle">Активные</h1>
 
-          {isLoading ? (
-            <Loader />
-          ) : isError ? (
-            <div className="users-page__message">
-              <p>Не получилось загрузить пользователей.</p>
-              <button type="button" className="users-page__retry" onClick={() => refetch()}>
-                Попробовать ещё раз
-              </button>
-            </div>
-          ) : (
-            <>
-              <div className="users-page__grid">
-                {activeUsers.map((user) => (
-                  <UserCard
-                    key={user.id}
-                    user={user}
-                    onToggleArchive={toggleArchive}
-                    onHide={hideUser}
-                  />
-                ))}
-              </div>
-
-              {!activeUsers.length && (
-                <p className="users-page__empty">Здесь пока нет активных карточек.</p>
+              {activeUsers.length ? (
+                <div className="grid">
+                  {activeUsers.map((user) => (
+                    <UserCard
+                      key={user.id}
+                      user={user}
+                      onArchive={() => archiveUser(user.id)}
+                      onHide={() => hideUser(user.id)}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <p className="emptyText">Активных пользователей нет.</p>
               )}
-            </>
-          )}
-        </section>
+            </section>
 
-        <section className="users-page__section">
-          <div className="users-page__section-head">
-            <h2 className="users-page__title">Архив</h2>
-          </div>
+            <section className="section">
+              <h2 className="sectionTitle">Архив</h2>
 
-          <div className="users-page__grid">
-            {archivedUsers.map((user) => (
-              <UserCard
-                key={user.id}
-                user={user}
-                archived
-                onToggleArchive={toggleArchive}
-                onHide={hideUser}
-              />
-            ))}
-          </div>
-
-          {!archivedUsers.length && <p className="users-page__empty">Архив пока пуст.</p>}
-        </section>
+              {archivedUsers.length ? (
+                <div className="grid">
+                  {archivedUsers.map((user) => (
+                    <UserCard
+                      key={user.id}
+                      user={user}
+                      isArchived
+                      onActivate={() => restoreUser(user.id)}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <p className="emptyText">Архив пока пуст.</p>
+              )}
+            </section>
+          </>
+        )}
       </main>
     </div>
   );
