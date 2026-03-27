@@ -1,15 +1,13 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
-import { EditUserPage } from './pages/EditUserPage';
-import { HomePage } from './pages/HomePage';
+import { Navigate, Route, Routes } from 'react-router';
+import { UsersPage } from './pages/UsersPage/UsersPage';
+import { UserEditPage } from './pages/UserEditPage/UserEditPage';
 
-export const App = () => {
+export default function App() {
   return (
-    <div className="app-shell">
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/users/:id/edit" element={<EditUserPage />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </div>
+    <Routes>
+      <Route path="/" element={<UsersPage />} />
+      <Route path="/users/:id" element={<UserEditPage />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
-};
+}

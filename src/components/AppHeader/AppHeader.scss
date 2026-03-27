@@ -1,0 +1,110 @@
+@use '../../styles/variables' as *;
+
+.app-header {
+  background: $color-surface;
+  border-bottom: 1px solid rgba($color-border, 0.9);
+
+  &__inner {
+    max-width: $container-width;
+    margin: 0 auto;
+    padding: 13px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  &__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: $color-text;
+  }
+
+  &__brand-mark {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: #ec3049;
+    color: $color-surface;
+    font-size: 10px;
+    line-height: 1;
+    flex: 0 0 auto;
+  }
+
+  &__brand-text {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  &__actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__icon-button {
+    width: 24px;
+    height: 24px;
+    border: 0;
+    background: transparent;
+    color: $color-text-secondary;
+    padding: 0;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: color 0.2s ease;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover {
+      color: $color-text;
+    }
+  }
+
+  &__profile {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 2px;
+  }
+
+  &__avatar {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex: 0 0 auto;
+  }
+
+  &__username {
+    font-size: 12px;
+    font-weight: 400;
+    color: $color-text-secondary;
+    line-height: 1.2;
+  }
+
+  @media (max-width: $breakpoint-mobile) {
+    &__inner {
+      padding: 13px 16px;
+    }
+
+    &__icon-button {
+      display: none;
+    }
+
+    &__profile {
+      margin-left: 0;
+    }
+
+    &__username {
+      display: none;
+    }
+  }
+}

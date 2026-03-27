@@ -1,0 +1,57 @@
+@use '../../styles/variables' as *;
+
+.save-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(22, 22, 22, 0.22);
+  display: grid;
+  place-items: center;
+  z-index: 40;
+  padding: 16px;
+
+  &__dialog {
+    position: relative;
+    width: min(100%, 220px);
+    background: $color-surface;
+    border-radius: 20px;
+    padding: 26px 20px 22px;
+    text-align: center;
+    box-shadow: 0 24px 48px rgba(22, 22, 22, 0.14);
+  }
+
+  &__close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    border: 0;
+    background: transparent;
+    color: $color-text-secondary;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  &__icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    margin: 0 auto 18px;
+    background: #bfeebf;
+    color: $color-surface;
+    display: grid;
+    place-items: center;
+
+    svg {
+      width: 34px;
+      height: 34px;
+    }
+  }
+
+  &__text {
+    margin: 0;
+    color: $color-text-secondary;
+    font-size: 16px;
+    line-height: 1.3;
+  }
+}

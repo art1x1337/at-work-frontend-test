@@ -1,26 +1,51 @@
-import type { ApiUser, User } from '../types/user';
-import { createAvatarDataUri } from '../utils/avatar';
+import { getUserAvatar } from '../utils/avatars';
+import type { User } from '../types/user';
 
-const USERS_URL = 'https://jsonplaceholder.typicode.com/users';
+const API_URL = 'https://jsonplaceholder.typicode.com';
 
-const mapUser = (user: ApiUser): User => ({
-  id: user.id,
-  name: user.name,
-  username: user.username,
-  email: user.email,
-  city: user.address.city,
-  phone: user.phone,
-  companyName: user.company.name,
-  avatarUrl: createAvatarDataUri(user.username),
-});
+interface ApiUser {
+  id: number;
+  name: string;
+  username: string;
+  email: string;
+  phone: string;
+  address: {
+    city: string;
+  };
+  company: {
+    name: string;
+  };
+}
 
-export const fetchUsers = async (): Promise<User[]> => {
-  const response = await fetch(USERS_URL);
+function mapUser(user: ApiUser): User {
+  return {
+    id: user.id,
+    name: user.name,
+    username: user.username,
+    email: user.email,
+    phone: user.phone,
+    city: user.address.city,
+    companyName: user.company.name,
+    avatar: getUserAvatar(user.id),
+  };
+}
+
+async function request<T>(path: string): Promise<T> {
+  const response = await fetch(`${API_URL}${path}`);
 
   if (!response.ok) {
-    throw new Error('Не удалось получить список пользователей');
+    throw new Error('Не удалось загрузить данные');
   }
 
-  const data = (await response.json()) as ApiUser[];
-  return data.slice(0, 6).map(mapUser);
-};
+  return response.json() as Promise<T>;
+}
+
+export async function fetchUsers(): Promise<User[]> {
+  const users = await request<ApiUser[]>('/users');
+  return users.slice(0, 6).map(mapUser);
+}
+
+export async function fetchUserById(id: number): Promise<User> {
+  const user = await request<ApiUser>(`/users/${id}`);
+  return mapUser(user);
+}

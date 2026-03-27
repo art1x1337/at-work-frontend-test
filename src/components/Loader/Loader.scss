@@ -1,0 +1,28 @@
+@use '../../styles/variables' as *;
+
+.loader {
+  min-height: 220px;
+  display: grid;
+  place-items: center;
+  gap: 12px;
+  color: $color-text-secondary;
+
+  &__spinner {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 3px solid rgba($color-border, 0.9);
+    border-top-color: $color-text;
+    animation: spin 0.8s linear infinite;
+  }
+
+  &__text {
+    font-size: 16px;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
