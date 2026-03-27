@@ -8,3 +8,8 @@ export interface User {
   companyName: string;
   avatar: string;
 }
+
+export type EditableUserFields = Pick<
+  User,
+  'name' | 'username' | 'email' | 'phone' | 'city' | 'companyName' | 'avatar'
+>;

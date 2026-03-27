@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import type { User } from '../types/user';
 import './UserCard.scss';
 
@@ -14,7 +14,7 @@ export const UserCard = ({ user, isArchived = false, onArchive, onActivate, onHi
   return (
     <article className={`user-card ${isArchived ? 'user-card--archived' : ''}`}>
       <div className="user-card__header">
-        <img src={user.avatarUrl} alt={user.name} className="user-card__avatar" />
+        <img src={user.avatar} alt={user.name} className="user-card__avatar" />
         <div>
           <span className="user-card__label">@{user.username}</span>
           <h3>{user.name}</h3>

@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router';
 import { z } from 'zod';
 import { fetchUsers } from '../api/users';
 import { Loader } from '../components/Loader';
@@ -176,7 +176,7 @@ export const EditUserPage = () => {
           </form>
 
           <aside className="card-surface profile-preview">
-            <img src={user.avatarUrl} alt={user.name} />
+            <img src={user.avatar} alt={user.name} />
             <div>
               <h3>{user.name}</h3>
               <p>@{user.username}</p>
